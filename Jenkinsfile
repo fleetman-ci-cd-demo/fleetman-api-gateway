@@ -4,7 +4,8 @@ pipeline {
    environment {
      SERVICE_NAME = "api-gateway"
      ORGANIZATION_NAME = "fleetman-ci-cd-demo"
-     REGISTRY_URL="virtualpairprogrammers"
+     YOUR_DOCKERHUB_USERNAME="virtualpairprogammers"
+     REPOSITORY_TAG="${YOUR_DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}"
    }
 
    stages {
@@ -22,9 +23,9 @@ pipeline {
 
       stage('Build and Push Image') {
          steps {
-           sh 'docker image build -f ./src/main/docker/Dockerfile -t ${REGISTRY_URL}/${SERVICE_NAME}:${BUILD_ID} .'
+           sh 'docker image build -f ./src/main/docker/Dockerfile -t ${REPOSITORY_TAG} .'
            withDockerRegistry(credentialsId: 'DockerHub', url: '') {
-             sh 'docker image push ${REGISTRY_URL}/${SERVICE_NAME}:${BUILD_ID}'
+             sh 'docker image push ${REPOSITORY_TAG}
               sh 'echo ${WORKSPACE}'
            }
          }
