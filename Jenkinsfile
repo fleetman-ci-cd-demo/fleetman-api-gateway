@@ -25,7 +25,7 @@ pipeline {
          steps {
            sh 'docker image build -f ./src/main/docker/Dockerfile -t ${REPOSITORY_TAG} .'
            withDockerRegistry(credentialsId: 'DockerHub', url: '') {
-             sh 'docker image push ${REPOSITORY_TAG}
+             sh 'docker image push ${REPOSITORY_TAG}'
               sh 'echo ${WORKSPACE}'
            }
          }
