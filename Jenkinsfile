@@ -24,10 +24,6 @@ pipeline {
       stage('Build and Push Image') {
          steps {
            sh 'docker image build -t ${REPOSITORY_TAG} .'
-           sh 'echo normally here you would push to a registry - we can use the local image'
-           # withDockerRegistry(credentialsId: 'DockerHub', url: '') {
-           #  sh 'docker image push ${REPOSITORY_TAG}'
-           # }
          }
       }
 
