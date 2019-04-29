@@ -22,15 +22,15 @@ import com.virtualpairprogrammers.api.services.PositionTrackingExternalService;
 
 @Controller
 @RequestMapping("/")
-public class VehicleController 
-{	
+public class VehicleController
+{
 	@Autowired
 	private SimpMessageSendingOperations messagingTemplate;
 
 	@Autowired
 	private PositionTrackingExternalService externalService;
 
-	private Date lastUpdateTime;
+	private Date lastUpdateTime = new java.util.Date();
 
 	@GetMapping("/")
 	@ResponseBody
@@ -52,7 +52,7 @@ public class VehicleController
 		Collection<VehiclePosition> vehicles = externalService.getHistoryFor(vehicleName);
 		for (VehiclePosition next: vehicles)
 		{
-			LatLong position = new LatLong(next.getLat(), next.getLongitude()); 
+			LatLong position = new LatLong(next.getLat(), next.getLongitude());
 			results.add(position);
 		}
 		Collections.reverse((List<?>) results);
