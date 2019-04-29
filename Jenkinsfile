@@ -29,9 +29,7 @@ pipeline {
 
       stage('Deploy to Cluster') {
           steps {
-                withKubeConfig(contextName: 'default', credentialsId: '9a91910b-c106-47bc-bc12-757dfd2ad6a2', namespace: 'default', serverUrl: '${KUBERNETES_API_SERVER}') {
                     sh 'envsubst < ${WORKSPACE}/deploy.yaml | kubectl apply -f -'
-                }
           }
       }
    }
