@@ -20,6 +20,10 @@ spec:
           value: production-microservice
         # Using this as a way to avoid having to bother pushing images to registry.
         imagePullPolicy: Never
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
 ---
 apiVersion: v1
 kind: Service
