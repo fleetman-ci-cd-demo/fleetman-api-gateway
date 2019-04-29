@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: api-gateway
-        image: virtualpairprogrammers/fleetman-ci-cd-demo-fleetman-api-gateway:${BUILD_ID}
+        image: ${REPOSITORY_TAG}
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: production-microservice
