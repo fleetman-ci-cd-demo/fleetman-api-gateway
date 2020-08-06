@@ -1,6 +1,6 @@
 FROM openjdk:8u131-jdk-alpine
 
-MAINTAINER Richard Chesterwood "contact@virtualpairprogrammers.com"
+MAINTAINER Steve Arroyo "scarroy@the-arroyo.net"
 
 EXPOSE 8080
 
