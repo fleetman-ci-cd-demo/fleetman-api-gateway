@@ -1,4 +1,4 @@
-FROM openjdk:8u131-jdk-alpine
+FROM amazoncorretto:17.0.5-al2022-RC-headless
 
 MAINTAINER Richard Chesterwood "contact@virtualpairprogrammers.com"
 
@@ -8,4 +8,4 @@ WORKDIR /usr/local/bin/
 
 COPY target/fleetman-0.0.1-SNAPSHOT.jar webapp.jar
 
-CMD ["java", "-Xmx50m","-jar","webapp.jar"]
+CMD ["java", "-jar","webapp.jar"]

@@ -1,14 +1,13 @@
 package com.virtualpairprogrammers.api.services;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.virtualpairprogrammers.api.domain.VehiclePosition;
 
 @Service 
@@ -16,31 +15,29 @@ public class PositionTrackingExternalService
 {
 	@Autowired
 	private RemotePositionMicroserviceCalls remoteService;
-	
-    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-	
-	//@HystrixCommand(fallbackMethod="handleExternalServiceDown")
-	public Collection<VehiclePosition> getAllUpdatedPositionsSince(Date since)
+
+	Logger logger = LoggerFactory.getLogger(PositionTrackingExternalService.class);
+
+	public Collection<VehiclePosition> getAllPositions()
 	{
-		String date = formatter.format(since);
-		Collection<VehiclePosition> results = remoteService.getAllLatestPositionsSince(date);
-		return results;
-	}
-	
-	public Collection<VehiclePosition> handleExternalServiceDown(Date since)
-	{
-		System.out.println("hystrix triggered.");
-		// as the external service is down, simply return "no updates"
-		return new HashSet<>();
+		try {
+			return remoteService.getAllLatestPositions();
+		}
+		catch (feign.RetryableException e)
+		{ 
+			logger.info("Unable to contact the position tracker. Most likely this is because that microservice hasn't yet started. This is only an error if the position tracker is running and healthy. Wait a few minutes before panicking!");
+			return new ArrayList<VehiclePosition>();
+		}
 	}
 
-	@HystrixCommand(fallbackMethod="getHistoryForDown")
 	public Collection<VehiclePosition> getHistoryFor(String vehicleName) {
-		return remoteService.getHistoryFor(vehicleName);
+		try {
+			return remoteService.getHistoryFor(vehicleName);
+		}
+		catch (feign.RetryableException e)
+		{ 
+			logger.info("Unable to contact the position tracker. Most likely this is because that microservice hasn't yet started. This is only an error if the position tracker is running and healthy. Wait a few minutes before panicking!");
+			return new ArrayList<VehiclePosition>();
+		}
 	}
-	
-	public Collection<VehiclePosition> getHistoryForDown(String vehicleName) {
-		return new HashSet<>();
-	}
-	
 }
